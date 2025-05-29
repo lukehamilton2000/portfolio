@@ -461,20 +461,23 @@
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
 
-            // Get form data
+            // Get form data - matching template variables exactly
             const formData = {
-                email: this.querySelector('[name="from_email"]').value,
                 name: this.querySelector('[name="from_name"]').value,
-                title: "Portfolio Contact Form",
+                email: this.querySelector('[name="from_email"]').value,
                 message: this.querySelector('[name="message"]').value
             };
 
             console.log('Sending email with data:', formData);
 
-            // Send the email
+            // First send the auto-reply
             emailjs.send('service_va1slza', 'template_adevlyz', formData)
                 .then(function(response) {
-                    console.log('Email sent successfully:', response);
+                    // Then send the notification to you using the Contact Us template
+                    return emailjs.send('service_va1slza', 'template_84r14jg', formData);
+                })
+                .then(function(response) {
+                    console.log('Emails sent successfully:', response);
                     window.location.href = 'thanks.html';
                 })
                 .catch(function(error) {
