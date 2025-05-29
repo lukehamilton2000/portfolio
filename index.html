@@ -15,8 +15,12 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // https://dashboard.emailjs.com/admin/account
-            emailjs.init('LxTek8bLdgh7QMW2w');
+            try {
+                emailjs.init('LxTek8bLdgh7QMW2w');
+                console.log('EmailJS Initialized');
+            } catch (error) {
+                console.error('EmailJS initialization error:', error);
+            }
         })();
     </script>
     <style>
@@ -457,14 +461,26 @@
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
 
-            emailjs.sendForm('service_va1slza', 'template_adevlyz', this)
-                .then(function() {
+            // Get form data
+            const formData = {
+                from_name: this.querySelector('[name="from_name"]').value,
+                from_email: this.querySelector('[name="from_email"]').value,
+                message: this.querySelector('[name="message"]').value
+            };
+
+            console.log('Sending email with data:', formData);
+
+            // Send the email
+            emailjs.send('service_va1slza', 'template_adevlyz', formData)
+                .then(function(response) {
+                    console.log('Email sent successfully:', response);
                     window.location.href = 'thanks.html';
-                }, function(error) {
+                })
+                .catch(function(error) {
                     console.error('Failed to send email:', error);
                     submitButton.textContent = originalText;
                     submitButton.disabled = false;
-                    alert('Failed to send message. Please try again.');
+                    alert('Failed to send message: ' + error.text);
                 });
         });
     </script>
