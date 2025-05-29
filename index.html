@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luke Hamilton - Portfolio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Existing styles... */
+        
+        .modal-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .modal-image {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-image:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Special handling for architecture diagram */
+        .modal-image:first-child img {
+            object-fit: contain;
+            background-color: rgba(255, 255, 255, 0.02);
+            padding: 0.5rem;
+        }
+
+        .modal-image p {
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Luke Hamilton</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span class="menu-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">Luke Hamilton</h1>
+                <p class="tagline slide-in">xAI | Biorobotics | Game Dev</p>
+                
+                <div class="expertise-cards">
+                    <div class="expertise-card slide-in-card">
+                        <div class="card-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI & Biorobotics</h3>
+                        <p>Developed AI-driven solutions for real-world challenges, including object detection for robotic pollination systems.</p>
+                    </div>
+
+                    <div class="expertise-card slide-in-card">
+                        <div class="card-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3>Game Development</h3>
+                        <p>Contributed to Chaotic Cats, a 2D game blending creativity and problem-solving—built core gameplay mechanics and player interactions.</p>
+                    </div>
+
+                    <div class="expertise-card slide-in-card">
+                        <div class="card-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Problem Solver</h3>
+                        <p>From debugging complex AI pipelines to iterating game mechanics under tight deadlines, I thrive on under pressure.</p>
+                    </div>
+                </div>
+
+                <a href="#projects" class="cta-button fade-in">View My Work</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Hello! I'm a passionate software engineer, video game developer, and AI enthusiast with a background in Biorobotics. I completed my MSc in Biorobotics, where I combined AI, computer vision, and robotics to solve real-world challenges, like developing systems for flower detection and tracking in controlled environments.
+
+                        <br> <br> In my current role, I work on cutting-edge AI projects at xAI, where I help fine-tune and evaluate Grok's capabilities by crafting nuanced, high-quality data and providing feedback that helps the model learn and improve. My work involves understanding the model's behavior, creating challenging examples, and contributing to the development of more capable, helpful, and aligned AI systems.
+                        
+                        <br><br> Whether it's building engaging gameplay mechanics or collaborating on AI models that push the boundaries of what technology can do, I'm driven by curiosity and the desire to solve complex problems in creative ways.</p>
+                </div>
+                <div class="about-image">
+                    <img src="images/profile_pic.jpg" alt="Luke Hamilton Profile Picture" class="profile-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2>My Projects</h2>
+            <div class="project-grid">
+                <!-- MSc Dissertation Project -->
+                <article class="project-card">
+                    <h3><span class="project-title" onclick="openProjectModal('msc-project')">Autonomous Flower Detection System</span></h3>
+                    <p>Developed an innovative AI-powered computer vision system for autonomous flower detection and tracking in precision agriculture applications. The system combines state-of-the-art object detection with robotic control systems, demonstrating practical applications of AI in sustainable agriculture.</p>
+                    <div class="project-achievements">
+                        <h4>Key Achievements:</h4>
+                        <ul>
+                            <li>Implemented real-time object detection using YOLOv8 with transfer learning optimization</li>
+                            <li>Designed robust machine vision pipeline for varied environmental conditions</li>
+                            <li>Integrated computer vision with robotic control systems</li>
+                            <li>Developed solutions for depth estimation and camera calibration</li>
+                        </ul>
+                    </div>
+                    <div class="project-tech">
+                        <h4>Technologies Used:</h4>
+                        <ul>
+                            <li>Python | OpenCV | PyTorch</li>
+                            <li>YOLOv8 | Transfer Learning</li>
+                            <li>Computer Vision | Robotics</li>
+                            <li>Embedded Systems</li>
+                        </ul>
+                    </div>
+                    <div class="project-links">
+                        <button class="project-link" onclick="openProjectModal('msc-project')">View Details</button>
+                    </div>
+                </article>
+
+                <!-- Chaotic Cats Game Project -->
+                <article class="project-card">
+                    <h3><span class="project-title" onclick="openProjectModal('game-project')">Chaotic Cats - Game Development</span></h3>
+                    <p>Contributed to the development of Chaotic Cats, an engaging 2D video game featuring mischievous cats in a cartoon-style world. Focused on core gameplay mechanics, player interactions, and creating immersive gaming experiences through creative problem-solving and collaborative development.</p>
+                    <div class="project-achievements">
+                        <h4>Key Contributions:</h4>
+                        <ul>
+                            <li>Implemented core gameplay mechanics and collision systems</li>
+                            <li>Developed engaging mini-games and player interactions</li>
+                            <li>Created smooth animations and visual feedback systems</li>
+                            <li>Collaborated in an agile game development environment</li>
+                        </ul>
+                    </div>
+                    <div class="project-tech">
+                        <h4>Technologies Used:</h4>
+                        <ul>
+                            <li>Unity Engine | C#</li>
+                            <li>2D Animation | Sprite Management</li>
+                            <li>Version Control | Agile Development</li>
+                            <li>Object-Oriented Programming</li>
+                        </ul>
+                    </div>
+                    <div class="project-links">
+                        <button class="project-link" onclick="openProjectModal('game-project')">View Details</button>
+                    </div>
+                </article>
+
+                <!-- AI Football Analysis Project -->
+                <article class="project-card">
+                    <h3>Football Analytics AI Platform</h3>
+                    <p>Coming soon - An innovative AI-powered platform for football analytics, combining advanced expected goals (xG) modeling with comprehensive match analysis. This project will showcase the intersection of sports science, machine learning, and data visualization.</p>
+                    <div class="project-links">
+                        <a href="#" class="project-link">Coming Soon</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <!-- MSc Project Details -->
+            <div id="msc-project" class="modal-project">
+                <h2>Autonomous Flower Detection System</h2>
+                <div class="modal-grid">
+                    <div class="modal-text">
+                        <h3>Project Overview</h3>
+                        <p>This MSc dissertation project focused on developing an innovative AI-powered computer vision system for autonomous flower detection and tracking in precision agriculture applications. The system demonstrates the practical application of artificial intelligence in addressing challenges in sustainable agriculture.</p>
+                        
+                        <h3>Technical Implementation</h3>
+                        <p>The core of the system utilizes YOLOv8 with custom transfer learning optimizations to achieve real-time object detection performance on resource-constrained hardware. The machine vision pipeline was designed to be robust against various environmental challenges including:</p>
+                        <ul>
+                            <li>Variable lighting conditions</li>
+                            <li>Partial occlusion</li>
+                            <li>Different viewing angles</li>
+                            <li>Environmental factors</li>
+                        </ul>
+
+                        <h3>Innovation & Impact</h3>
+                        <p>This project represents a significant step forward in precision agriculture, offering potential solutions for:</p>
+                        <ul>
+                            <li>Automated pollination systems</li>
+                            <li>Crop monitoring and yield prediction</li>
+                            <li>Sustainable farming practices</li>
+                            <li>Integration with robotic systems</li>
+                        </ul>
+                    </div>
+                    <div class="modal-images">
+                        <div class="modal-image">
+                            <img src="images/flow_chart.png" alt="System Architecture Diagram">
+                            <p>System Architecture Diagram</p>
+                        </div>
+                        <div class="modal-image">
+                            <img src="images/flower.jpg" alt="Detection Results">
+                            <p>Detection Results</p>
+                        </div>
+                        <div class="modal-image">
+                            <img src="images/results.png" alt="Model Comparison">
+                            <p>Model Comparison</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Project Details -->
+            <div id="game-project" class="modal-project">
+                <h2>Chaotic Cats - Game Development</h2>
+                <div class="modal-grid">
+                    <div class="modal-text">
+                        <h3>Project Overview</h3>
+                        <p>Chaotic Cats is a fun and fast-paced 2D video game that puts players in control of mischievous cats causing mayhem in a vibrant, cartoon-style world. As a key contributor to the development team, I focused on implementing core gameplay mechanics and creating engaging player experiences.</p>
+                        
+                        <h3>Technical Implementation</h3>
+                        <p>Working with Unity and C#, I developed several critical game systems:</p>
+                        <ul>
+                            <li>Robust collision detection and trigger systems</li>
+                            <li>Dynamic shark avoidance mini-game with warning mechanics</li>
+                            <li>Smooth player animations and death sequences</li>
+                            <li>Integration of 2D art assets and sprite animations</li>
+                        </ul>
+
+                        <h3>Development Process</h3>
+                        <p>The project showcased strong collaborative development practices:</p>
+                        <ul>
+                            <li>Agile development methodology with regular team updates</li>
+                            <li>Iterative design based on team feedback</li>
+                            <li>Creative problem-solving under time constraints</li>
+                            <li>Effective integration of art and technical elements</li>
+                        </ul>
+                    </div>
+                    <div class="modal-images">
+                        <div class="modal-image">
+                            <img src="images/logo.jpg" alt="Game Logo">
+                            <p>Game Logo</p>
+                        </div>
+                        <div class="modal-image">
+                            <img src="images/gameplay.jpg" alt="Gameplay Screenshot">
+                            <p>Gameplay Screenshot</p>
+                        </div>
+                        <div class="modal-image">
+                            <img src="images/flappy.jpg" alt="Gameplay Screenshot two">
+                            <p>Flappy Cat Minigame</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-content">
+                <form class="contact-form" action="https://formsubmit.co/lukehamilton2000@gmail.com" method="POST">
+                    <!-- Customization -->
+                    <input type="hidden" name="_subject" value="Portfolio Contact Form">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="thanks.html">
+                    <input type="hidden" name="_captcha" value="true">
+                    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">Send Message</button>
+                </form>
+                <div class="contact-info">
+                    <p>Or reach out directly:</p>
+                    <a href="mailto:lukehamilton2000@gmail.com" class="email-link">lukehamilton2000@gmail.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="#" aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Twitter Profile"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 Luke Hamilton. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Header JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('.header');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinksContainer = document.querySelector('.nav-links');
+
+            // Handle scroll
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 0) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Set active link based on scroll position
+            window.addEventListener('scroll', () => {
+                let current = '';
+                const sections = document.querySelectorAll('section');
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinksContainer.classList.toggle('active');
+            });
+        });
+    </script>
+
+    <!-- Modal JavaScript -->
+    <script>
+        // Get modal elements
+        const modal = document.getElementById('project-modal');
+        const closeBtn = document.querySelector('.close-modal');
+        const modalProjects = document.querySelectorAll('.modal-project');
+
+        // Function to open modal with specific project
+        function openProjectModal(projectId) {
+            modal.style.display = 'block';
+            // Force a reflow before adding the active class
+            modal.offsetHeight;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            
+            // Hide all projects first
+            modalProjects.forEach(project => {
+                project.style.display = 'none';
+            });
+            
+            // Show the selected project
+            const selectedProject = document.getElementById(projectId);
+            if (selectedProject) {
+                selectedProject.style.display = 'block';
+            }
+        }
+
+        // Function to close modal with animation
+        function closeModal() {
+            modal.classList.remove('active');
+            // Wait for the animation to complete before hiding the modal
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            }, 300); // Match this with the CSS transition duration
+        }
+
+        // Close modal when clicking the close button
+        closeBtn.onclick = closeModal;
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal when pressing Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html> 
