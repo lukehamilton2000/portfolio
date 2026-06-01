@@ -206,10 +206,7 @@
       text-decoration: none;
       color: var(--text);
       transition: color 0.18s ease;
-    }
-
-    .project-row.no-top-border {
-      border-top: none;
+      position: relative;
     }
 
     .project-row .year {
@@ -220,6 +217,32 @@
 
     .project-row .year.hidden {
       visibility: hidden;
+    }
+
+    /* === Same-year grouping logic ===
+       - Place the `same-year` class on a project *when the next project is also the same year*.
+         This row's bottom border will have the partial treatment (no line under the year column).
+       - The row that starts a new year (or is the last of its year group) should NOT have `same-year`.
+         Its bottom border will be full-width → clean visual separation when a new year begins.
+       - On rows that are not the first of their year, hide the year number using `.year.hidden` on the <span>.
+    */
+
+    .project-row.same-year::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 62px;           /* year column (48px) + gap (14px) */
+      height: 3px;
+      background: var(--bg);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    @media (max-width: 480px) {
+      .project-row.same-year::after {
+        width: 56px;         /* 42px year column + 14px gap on mobile */
+      }
     }
 
     .project-row .title {
@@ -271,6 +294,11 @@
     .badge-soon {
       border-color: var(--muted);
       color: var(--muted);
+    }
+
+    .badge-new {
+      border-color: #22c55e;
+      color: #22c55e;
     }
 
     .skills {
@@ -406,20 +434,25 @@
     <section class="projects">
       <div class="section-label">Projects</div>
       <div class="project-list">
-        <a class="project-row" href="football-analytics.html">
+        <a class="project-row same-year" href="index-health.html">
           <span class="year">2026</span>
+          <span class="title">Index Health <span class="badge badge-new">New</span></span>
+          <span class="tech">React · Supabase · Netlify</span>
+        </a>
+        <a class="project-row" href="football-analytics.html">
+          <span class="year hidden">2026</span>
           <span class="title">Football Analytics AI Platform <span class="badge badge-soon">Soon</span></span>
           <span class="tech">Python · ML</span>
         </a>
-        <a class="project-row" href="flower-detection.html">
+        <a class="project-row" href="chaotic-cats.html">
           <span class="year">2025</span>
-          <span class="title">Autonomous Flower Detection System <span class="badge">MSc</span></span>
-          <span class="tech">Python · YOLOv8 · PyTorch</span>
-        </a>
-        <a class="project-row no-top-border" href="chaotic-cats.html">
-          <span class="year hidden">2025</span>
           <span class="title">Chaotic Cats</span>
           <span class="tech">Unity · C#</span>
+        </a>
+        <a class="project-row" href="flower-detection.html">
+          <span class="year">2023</span>
+          <span class="title">Autonomous Flower Detection System <span class="badge">MSc</span></span>
+          <span class="tech">Python · YOLOv8 · PyTorch</span>
         </a>
       </div>
     </section>
@@ -433,6 +466,8 @@
         <span class="skill-tag">AI Fine-tuning</span><span class="skill-tag">Unity</span>
         <span class="skill-tag">C#</span><span class="skill-tag">Machine Learning</span>
         <span class="skill-tag">Game Development</span><span class="skill-tag">Git</span>
+        <span class="skill-tag">React</span><span class="skill-tag">Supabase</span>
+        <span class="skill-tag">TypeScript</span>
       </div>
     </section>
 
