@@ -1,0 +1,328 @@
+<!-- Built by hand. HTML, CSS, vanilla JS. No frameworks, no build tools. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f0" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111110" />
+  <title>SpellType — Luke Hamilton</title>
+  <meta name="description" content="SpellType — an audio-first spelling trainer inspired by MonkeyType. A case study on re-architecting the voice pipeline, server-side anti-cheat, and SEO at scale." />
+  <link rel="canonical" href="https://lukehamilton2000.github.io/portfolio/spelltype.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root, :root[data-theme="light"] {
+      --bg:#f5f5f0; --text:#1a1a1a; --muted:#aaa; --muted-hover:#444; --border:#e2e2dc;
+      --accent:#5b6af0; --accent-light:#818cf8; --cw:580px;
+      --card:#fff; --card-dark:#1a1a18;
+    }
+    :root[data-theme="dark"] {
+      --bg:#111110; --text:#e6e6e2; --muted:#555; --muted-hover:#999; --border:#2a2a28;
+      --accent:#818cf8; --accent-light:#a5b4fc; --cw:580px;
+      --card:#1a1a18; --card-dark:#111110;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:#111110; --text:#e6e6e2; --muted:#555; --muted-hover:#999; --border:#2a2a28;
+        --accent:#818cf8; --accent-light:#a5b4fc; --cw:580px;
+        --card:#1a1a18; --card-dark:#111110;
+      }
+    }
+    html { font-size: 15px; }
+    body {
+      background:var(--bg); color:var(--text);
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      font-size:1rem; line-height:1.6; padding:72px 24px 100px; -webkit-font-smoothing:antialiased;
+    }
+    .progress { position:fixed;top:0;left:0;height:1.5px;width:0%;background:var(--text);z-index:100;transition:width 0.08s linear; }
+    .sidebar { position:fixed;top:72px;left:calc(50% - 478px);width:140px; }
+    .sidebar .back { display:inline-flex;align-items:center;gap:5px;font-size:0.8125rem;color:var(--muted);text-decoration:none;margin-bottom:28px;transition:color 0.12s; }
+    .sidebar .back:hover { color:var(--text); }
+    .sidebar nav { display:flex;flex-direction:column; }
+    .sidebar nav a { font-size:0.75rem;color:var(--muted);text-decoration:none;padding:5px 0 5px 10px;margin-left:-12px;line-height:1.4;border-left:2px solid transparent;transition:color 0.12s,border-color 0.12s; }
+    .sidebar nav a:hover { color:var(--muted-hover); }
+    .sidebar nav a.active { color:var(--text);border-left-color:var(--text); }
+    .mobile-back { display:none;align-items:center;gap:5px;font-size:0.8125rem;color:var(--muted);text-decoration:none;margin-bottom:40px;transition:color 0.12s; }
+    .mobile-back:hover { color:var(--text); }
+    .content { max-width:var(--cw);margin:0 auto; }
+    :focus-visible { outline:2px solid var(--accent);outline-offset:3px;border-radius:2px; }
+
+    .article-header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .header-content { flex: 1; }
+    .article-header h1 { font-size:1.2rem;font-weight:500;line-height:1.25;letter-spacing:-0.02em;margin-bottom:10px; }
+    .theme-toggle { background: none; border: none; padding: 4px; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: color 0.15s ease, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); margin-top: 2px; }
+    .theme-toggle:hover { color: var(--text); }
+    .theme-toggle:active { transform: scale(0.9); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle #sun-icon { display: none; }
+    .theme-toggle #moon-icon { display: block; }
+    :root[data-theme="dark"] .theme-toggle #sun-icon { display: block; }
+    :root[data-theme="dark"] .theme-toggle #moon-icon { display: none; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme-toggle #sun-icon { display: block; } :root:not([data-theme="light"]) .theme-toggle #moon-icon { display: none; } }
+
+    .article-meta { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .meta-item { font-size:0.8125rem;color:var(--muted); }
+    .badge { font-size:0.625rem;font-weight:500;padding:1px 6px;border:1.5px solid var(--accent);color:var(--accent);letter-spacing:0.03em;line-height:1.6;border-radius:40% 60% 55% 45% / 55% 45% 55% 45%;transform:rotate(-1deg);display:inline-flex;flex-shrink:0; }
+    .badge-new { border-color:#22c55e;color:#22c55e; }
+
+    /* Prominent live-demo / source links (new component, built from existing tokens) */
+    .project-links { display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px; }
+    .project-links a { display:inline-flex;align-items:center;gap:7px;font-size:0.8125rem;color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:5px;padding:6px 12px;transition:border-color 0.15s,color 0.15s; }
+    .project-links a:hover { border-color:var(--accent);color:var(--accent); }
+    .project-links a.primary { border-color:var(--accent);color:var(--accent); }
+    .project-links a .arrow { font-size:0.75rem;color:var(--muted);transition:color 0.15s,transform 0.15s; }
+    .project-links a:hover .arrow, .project-links a.primary .arrow { color:var(--accent); }
+    .project-links a:hover .arrow { transform:translate(1px,-1px); }
+
+    .article-body { border-top:1px solid var(--border);padding-top:36px; }
+    .article-body section { margin-bottom:44px; }
+    .article-body section:last-child { margin-bottom:0; }
+    .article-body h2 { font-size:0.6875rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;scroll-margin-top:88px; }
+    .article-body p { font-size:0.9375rem;margin-bottom:14px; }
+    .article-body p:last-child { margin-bottom:0; }
+    .article-body strong { font-weight:500; }
+    .article-body code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82em;background:var(--card);border:1px solid var(--border);border-radius:3px;padding:0.5px 4px; }
+    .article-body ul { list-style:none; }
+    .article-body ul li { padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;align-items:baseline;gap:10px; }
+    .article-body ul li:first-child { border-top:1px solid var(--border); }
+    .article-body ul li::before { content:'—';color:var(--muted);flex-shrink:0;font-size:0.8125rem; }
+
+    /* Problem → Approach → Outcome decision blocks */
+    .decision { padding:18px 0;border-bottom:1px solid var(--border); }
+    .decision:first-of-type { border-top:1px solid var(--border); }
+    .decision h3 { font-size:0.9rem;font-weight:500;letter-spacing:-0.01em;margin-bottom:12px; }
+    .decision .row { display:grid;grid-template-columns:78px 1fr;gap:2px 14px;font-size:0.9rem;margin-bottom:9px; }
+    .decision .row:last-child { margin-bottom:0; }
+    .decision .row .k { font-size:0.625rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);padding-top:4px; }
+    .decision .row.outcome .v { color:var(--text); }
+
+    .tech-list { display:flex;flex-wrap:wrap;gap:6px; }
+    .tech-tag { font-size:0.75rem;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:2px 8px;line-height:1.5; }
+
+    /* Screenshot placeholders — replace the inner box with an <img> (see comments) */
+    figure.shot { margin:0 0 18px; }
+    figure.shot .ph { border:1px dashed var(--border);border-radius:6px;background:var(--card);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px; }
+    figure.shot .ph span { font-size:0.75rem;color:var(--muted);line-height:1.5; }
+    figure.shot img { width:100%;border:1px solid var(--border);border-radius:6px;display:block; }
+    figure.shot figcaption { font-size:0.75rem;color:var(--muted);margin-top:8px; }
+
+    footer { margin-top:64px;padding-top:18px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted); }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { transition-duration:0.01ms !important;animation-duration:0.01ms !important; } }
+    @media (max-width:980px) { .sidebar { display:none; } .mobile-back { display:inline-flex; } }
+    @media (max-width:480px) {
+      body { padding:48px 18px 72px; }
+      .decision .row { grid-template-columns:1fr;gap:1px; }
+      .decision .row .k { padding-top:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+
+  <aside class="sidebar">
+    <a class="back" href="index.html">← Index</a>
+    <nav id="toc">
+      <a href="#overview">Overview</a>
+      <a href="#voice">The voice pipeline</a>
+      <a href="#decisions">Engineering decisions</a>
+      <a href="#features">Features</a>
+      <a href="#tech">Tech stack</a>
+      <a href="#status">Status</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <a class="mobile-back" href="index.html">← Index</a>
+
+    <header class="article-header">
+      <div class="header-content">
+        <h1>SpellType</h1>
+        <div class="article-meta">
+          <time class="meta-item" datetime="2026">2026</time>
+          <span class="badge badge-new">New</span>
+          <span class="meta-item" id="reading-time"></span>
+        </div>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+    </header>
+
+    <div class="project-links">
+      <a class="primary" href="https://spelltype.vercel.app" target="_blank" rel="noopener">Live demo <span class="arrow">↗</span></a>
+      <a href="https://github.com/lukehamilton2000/spelltype" target="_blank" rel="noopener">Source <span class="arrow">↗</span></a>
+    </div>
+
+    <div class="article-body">
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>SpellType is an audio-first spelling trainer, inspired by MonkeyType. It reads a word aloud, you type it, and you get instant per-letter accuracy feedback. The whole thing is keyboard-first and built around a tight "one more round" loop — minimal UI, a 3-2-1 countdown, and immediate results so you can practise spelling fast.</p>
+        <p>This page is less about the feature list and more about the decisions behind it: where I had to choose between the flashy option and the one that actually shipped well, and what each choice cost or saved.</p>
+
+        <!-- SCREENSHOT #1 — the main game screen (word prompt + typing input).
+             Drop the file at images/spelltype-game.png and replace the .ph <div> below with:
+             <img src="images/spelltype-game.png" alt="SpellType game screen with a word prompt and typing input" /> -->
+        <figure class="shot">
+          <div class="ph"><span>[ Screenshot placeholder — main game screen ]<br />Replace with images/spelltype-game.png</span></div>
+          <figcaption>The core loop: hear the word, type it, get per-letter feedback.</figcaption>
+        </figure>
+      </section>
+
+      <section id="voice">
+        <h2>The voice pipeline</h2>
+        <p>This was the most interesting rewrite in the project, so I'll lead with it. The whole app depends on words being read aloud — clearly, instantly, at a speed the user controls. My first version got the quality right but everything else wrong.</p>
+        <div class="decision">
+          <h3>Re-architecting from live TTS to pre-rendered audio</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">I started with live in-browser neural TTS — an ONNX model running via WebAssembly, roughly 400MB. It loaded slowly and janked the UI, because synthesis ran on the main thread and blocked rendering every time a word was spoken.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">I diagnosed the root causes and moved synthesis offline. A Node script now runs the same neural model once, ahead of time, over all ~1,800 words and encodes them to MP3. The app ships those as ~22MB of static files behind a manifest, with the browser's built-in voice as a fallback. Per-word speed is handled at playback time via <code>HTMLAudio</code> <code>playbackRate</code>, so I only need one recording per word instead of re-synthesising for each speed.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Playback is instant and jank-free, the ~400MB download is gone (down to ~22MB of static assets), audio quality is unchanged, and speed control stayed flexible. I chose the pragmatic architecture over the flashy one — and the app is better for it.</span></div>
+        </div>
+
+        <!-- SCREENSHOT #2 — results / per-letter accuracy view after a round.
+             Drop the file at images/spelltype-results.png and swap the .ph <div> for an <img> as above. -->
+        <figure class="shot">
+          <div class="ph"><span>[ Screenshot placeholder — results / per-letter feedback ]<br />Replace with images/spelltype-results.png</span></div>
+          <figcaption>Round results, scored and validated server-side.</figcaption>
+        </figure>
+      </section>
+
+      <section id="decisions">
+        <h2>Engineering decisions</h2>
+        <p>A few more calls I'm happy with, each framed the same way — the problem, what I did, and what it bought me.</p>
+
+        <div class="decision">
+          <h3>Reliable audio autoplay on mobile</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">iOS and Android block audio that doesn't originate from a user gesture. The first word plays after a 3-2-1 countdown — by which point the tap that started the round is "over", so the browser silently refuses to play it.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">I keep a single persistent <code>&lt;audio&gt;</code> element that I "unlock" inside the user's tap gesture, then reuse it for every word in the session instead of creating new elements.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">The countdown-delayed first word plays reliably on mobile, where the obvious implementation fails silently.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Server-side scoring and anti-cheat</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">There's a public leaderboard, so client-reported scores can't be trusted — anyone can edit a network request.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Scores are recomputed and validated on the server; client values are never trusted. I added DB-backed rate limiting, same-origin CSRF guards, and routed every public response through a single "public user projection" helper so private fields can't leak by accident. I ran a full security and cost review before launch.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">A leaderboard you can actually trust, and one place to reason about what's safe to expose.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Privacy-conscious social layer</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">An accuracy-ranked leaderboard and public profiles are fun, but they're an easy way to leak personal data you didn't mean to share.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Everything public is opt-in: a chosen handle instead of a real name, an avatar shown only if the user enables it, and no per-word or per-answer data ever exposed.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">A social layer that's safe by default and only ever shows what a user has explicitly agreed to.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>SEO as a growth engine</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">A niche tool needs a way for people to find it that isn't "I told my friends".</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">I statically render ~1,800 "how to spell X" pages — one per word — each with its own audio and a direct path into the game, plus a generated <code>sitemap.xml</code> and <code>robots.txt</code>.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">~1,800 indexable entry points into the app, each useful on its own and each a doorway into the practice loop.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Resilience and graceful degradation</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">A serverless app shouldn't fall over because a database is slow, exhausted, or simply not configured.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">The app runs even with no database configured (guest mode carries the experience), and database access uses pooled connections sized for serverless Postgres.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">The core experience degrades gracefully instead of breaking, and connection limits don't bite under load.</span></div>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2>Features</h2>
+        <ul>
+          <li>Audio-first loop with per-letter feedback and a 3-2-1 countdown</li>
+          <li>Word lists by category — common misspellings, frequency tiers, difficulty from easy to insane</li>
+          <li>Homophone hints that show the meaning, not the spelling, so they never give the answer away</li>
+          <li>Guest mode via localStorage, plus cloud sync when signed in</li>
+          <li>Accuracy-ranked leaderboard, public profiles, and a stats dashboard with charts</li>
+          <li>User-controlled playback speed and a browser-voice fallback</li>
+          <li>A flat amber-on-charcoal theme inspired by MonkeyType</li>
+        </ul>
+
+        <!-- SCREENSHOT #3 — leaderboard or public profile / stats dashboard.
+             Drop the file at images/spelltype-leaderboard.png and swap the .ph <div> for an <img> as above. -->
+        <figure class="shot">
+          <div class="ph"><span>[ Screenshot placeholder — leaderboard / profile / stats ]<br />Replace with images/spelltype-leaderboard.png</span></div>
+          <figcaption>The opt-in social layer: leaderboard, profiles, and stats.</figcaption>
+        </figure>
+      </section>
+
+      <section id="tech">
+        <h2>Tech stack</h2>
+        <div class="tech-list">
+          <span class="tech-tag">Next.js 16</span><span class="tech-tag">App Router</span>
+          <span class="tech-tag">TypeScript</span><span class="tech-tag">React 19</span>
+          <span class="tech-tag">Tailwind CSS v4</span><span class="tech-tag">PostgreSQL (Neon)</span>
+          <span class="tech-tag">Prisma</span><span class="tech-tag">NextAuth v5</span>
+          <span class="tech-tag">Google OAuth</span><span class="tech-tag">framer-motion</span>
+          <span class="tech-tag">Recharts</span><span class="tech-tag">Vercel</span>
+        </div>
+      </section>
+
+      <section id="status">
+        <h2>Status</h2>
+        <p>Live and playable — try it at <a href="https://spelltype.vercel.app" target="_blank" rel="noopener">spelltype.vercel.app</a>, and the source is on <a href="https://github.com/lukehamilton2000/spelltype" target="_blank" rel="noopener">GitHub</a>.</p>
+        <p>It's a personal project, so I built it to sharpen the engineering rather than chase numbers. The parts I'm proudest of aren't on screen: the decision to pre-render the audio, the refusal to trust the client, and the privacy defaults that made the social layer safe to ship.</p>
+      </section>
+    </div>
+
+    <footer id="local-time">Loading…</footer>
+  </main>
+
+  <script>
+    // Reading time
+    const words = document.querySelector('.article-body').textContent.trim().split(/\s+/).length;
+    document.getElementById('reading-time').textContent = Math.max(1, Math.round(words / 200)) + ' min read';
+
+    // Scroll progress
+    window.addEventListener('scroll', () => {
+      document.getElementById('progress').style.width =
+        Math.min(window.scrollY / (document.body.scrollHeight - innerHeight) * 100, 100) + '%';
+    }, { passive: true });
+
+    // Active TOC
+    const secs = document.querySelectorAll('.article-body section[id]');
+    const links = document.querySelectorAll('#toc a');
+    secs.forEach(s => new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`#toc a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    }), { rootMargin: '-20% 0px -70% 0px' }).observe(s));
+
+    // Keyboard nav
+    document.addEventListener('keydown', e => {
+      if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.key === 'Escape' || e.key === 'h') window.location.href = 'index.html';
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+                      (!document.documentElement.hasAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        const newTheme = isDark ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+    }
+
+    // London time
+    function tickTime() {
+      const el = document.getElementById('local-time');
+      if (el) el.textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}) + ' in London';
+    }
+    tickTime(); setInterval(tickTime, 10000);
+  </script>
+</body>
+</html>
