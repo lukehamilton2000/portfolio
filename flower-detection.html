@@ -188,17 +188,17 @@
     <div class="article-body">
       <section id="overview">
         <h2>Overview</h2>
-        <p>For my MSc dissertation in Biorobotics at the University of Bristol, I built a computer vision pipeline capable of detecting and tracking flowers in real time — designed for deployment in precision agriculture environments where automated pollination robots need to navigate complex, dynamic plant canopies.</p>
-        <p>The core challenge was reliability under real-world conditions: variable lighting, occlusion from leaves, and flowers at unpredictable angles. I used transfer learning on top of YOLOv8, fine-tuned on a custom annotated dataset captured across different growth stages and lighting conditions.</p>
+        <p>My MSc Biorobotics dissertation at the University of Bristol: a real-time computer vision pipeline that detects and tracks flowers for autonomous pollination robots operating in live plant canopies.</p>
+        <p>The hard part was reliability in the field — variable lighting, leaf occlusion, flowers at arbitrary angles. I fine-tuned YOLOv8 via transfer learning on a custom dataset I annotated across growth stages and lighting conditions, then got it running on embedded hardware at frame rate.</p>
       </section>
       <section id="built">
         <h2>What I built</h2>
         <ul>
-          <li>Real-time YOLOv8-based detection pipeline running on embedded hardware</li>
-          <li>Robust preprocessing to normalise lighting and handle occlusion</li>
-          <li>Depth estimation integration for 3D localisation of flower positions</li>
-          <li>Robotic control interface for passing coordinates to a manipulator arm</li>
-          <li>Custom training dataset with bounding-box annotations across multiple plant species</li>
+          <li>Real-time YOLOv8 detection pipeline on embedded hardware</li>
+          <li>Preprocessing to normalise lighting and survive occlusion</li>
+          <li>Depth estimation for 3D localisation of each flower</li>
+          <li>Control interface feeding coordinates to a manipulator arm</li>
+          <li>Custom annotated dataset spanning multiple plant species</li>
         </ul>
       </section>
       <section id="tech">
@@ -212,7 +212,7 @@
       </section>
       <section id="impact">
         <h2>Impact</h2>
-        <p>The system demonstrated consistent detection accuracy under challenging field conditions, with a pipeline capable of supporting fully autonomous pollination robots. The research contributes to solving one of agriculture's most pressing problems — the global decline in natural pollinators — through precision, scalable automation.</p>
+        <p>The pipeline held detection accuracy under field conditions and ran fast enough on-device to feed live coordinates to a manipulator arm — the bar for closing the loop on autonomous pollination. The motivation is real: pollinator decline is a genuine threat to crop yields, and robotic pollination is one credible response.</p>
       </section>
     </div>
 
