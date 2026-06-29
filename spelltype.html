@@ -8,7 +8,7 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f0" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111110" />
   <title>SpellType — Luke Hamilton</title>
-  <meta name="description" content="SpellType — an audio-first spelling trainer inspired by MonkeyType. A case study on re-architecting the voice pipeline, server-side anti-cheat, and SEO at scale." />
+  <meta name="description" content="SpellType is an audio-first spelling trainer inspired by MonkeyType. A case study on re-architecting the voice pipeline, server-side anti-cheat, and SEO at scale." />
   <link rel="canonical" href="https://lukehamilton2000.github.io/portfolio/spelltype.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -166,7 +166,7 @@
       <section id="overview">
         <h2>Overview</h2>
         <p>SpellType is an audio-first spelling trainer in the spirit of MonkeyType: it speaks a word, you type it, and you get per-letter feedback the instant you submit. Keyboard-first, minimal UI, a 3-2-1 countdown, and immediate results.</p>
-        <p>What's below is the engineering — the calls that mattered, the tradeoffs behind them, and what each one bought.</p>
+        <p>The rest of this page covers how it's built: the main engineering decisions and the tradeoffs behind them.</p>
 
         <figure class="shot">
           <img src="images/spelltype-game.png" alt="SpellType game screen with a word prompt and typing input" />
@@ -179,7 +179,7 @@
         <p>Everything in the app hangs off words being read aloud clearly, instantly, at a speed the user sets. The first build nailed the audio quality and got everything around it wrong.</p>
         <div class="decision">
           <h3>From live neural TTS to pre-rendered audio</h3>
-          <div class="row"><span class="k">Problem</span><span class="v">v1 ran a neural TTS model in-browser — ONNX over WebAssembly, ~400MB. Synthesis ran on the main thread, so every spoken word blocked rendering and janked the UI, on top of a punishing cold start.</span></div>
+          <div class="row"><span class="k">Problem</span><span class="v">v1 ran a neural TTS model in-browser: ONNX over WebAssembly, ~400MB. Synthesis ran on the main thread, so every spoken word blocked rendering and janked the UI, on top of a punishing cold start.</span></div>
           <div class="row"><span class="k">Approach</span><span class="v">Moved synthesis offline. A build-time Node script runs the same model once across all ~1,800 words and encodes them to MP3, shipped as static assets behind a manifest with the platform voice as fallback. Per-word speed is set at playback via <code>HTMLAudio.playbackRate</code> — one recording per word instead of re-synthesising for every speed.</span></div>
           <div class="row outcome"><span class="k">Outcome</span><span class="v">Instant, jank-free playback. The 400MB runtime dependency dropped to ~22MB of static files, with identical audio quality and the same speed control.</span></div>
         </div>
@@ -209,7 +209,7 @@
         <div class="decision">
           <h3>Privacy-by-default social layer</h3>
           <div class="row"><span class="k">Problem</span><span class="v">Leaderboards and public profiles are an easy way to leak data users never meant to share.</span></div>
-          <div class="row"><span class="k">Approach</span><span class="v">Everything public is opt-in — a chosen handle, an avatar only if enabled — and per-word and per-answer data is never exposed.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Everything public is opt-in: a chosen handle, an avatar only if enabled. Per-word and per-answer data is never exposed.</span></div>
           <div class="row outcome"><span class="k">Outcome</span><span class="v">Nothing surfaces that the user hasn't explicitly turned on.</span></div>
         </div>
 
@@ -232,7 +232,7 @@
         <h2>Features</h2>
         <ul>
           <li>Audio-first loop with per-letter feedback and a 3-2-1 countdown</li>
-          <li>Word lists by category — common misspellings, frequency tiers, difficulty from easy to insane</li>
+          <li>Word lists by category: common misspellings, frequency tiers, difficulty from easy to insane</li>
           <li>Homophone hints that show the meaning, not the spelling, so they never give the answer away</li>
           <li>Guest mode via localStorage, plus cloud sync when signed in</li>
           <li>Accuracy-ranked leaderboard, public profiles, and a stats dashboard with charts</li>
@@ -261,7 +261,7 @@
       <section id="status">
         <h2>Status</h2>
         <p>Live and playable at <a href="https://spelltype.vercel.app" target="_blank" rel="noopener">spelltype.vercel.app</a>, with source on <a href="https://github.com/lukehamilton2000/spelltype" target="_blank" rel="noopener">GitHub</a>.</p>
-        <p>A solo build, end to end — the work I care about most isn't on screen: pre-rendering the audio pipeline, server-authoritative scoring, and privacy defaults that made the social layer safe to ship.</p>
+        <p>A solo build, end to end. The work I care about most isn't on screen: pre-rendering the audio pipeline, server-authoritative scoring, and the privacy defaults that made the social layer safe to ship.</p>
       </section>
     </div>
 
