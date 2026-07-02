@@ -16,6 +16,19 @@ adjacent HTML comment.
 
 PNG preferred. Landscape orientation looks best with the case-study layout.
 
+## Index Health (`index-health.html`)
+
+Capture from live demo at [index-health.dev](https://index-health.dev) (landing → Try the live demo).
+
+| Filename | Shot |
+|---|---|
+| `index-health-dashboard.png` | Today dashboard: hero Index Score, confidence bar, driver cards |
+| `index-health-metrics.png` | Metrics screen with HRV or Sleep: trend chart, correlations |
+| `index-health-history.png` | History: 90-day Index chart + personal records row |
+| `index-health-social.png` | Social: league table with ranks and 7-day deltas |
+
+Drop files here, then in `index-health.html` replace the matching `<div class="ph">…</div>` with the `<img>` tag shown in the adjacent HTML comment.
+
 ## Voronoi Mosaic (`voronoi-mosaic.html`)
 
 | Filename | Shot |

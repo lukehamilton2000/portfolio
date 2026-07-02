@@ -8,7 +8,7 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f0" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111110" />
   <title>Index Health - Luke Hamilton</title>
-  <meta name="description" content="Health tracking app with a single aggregated Index Health score. Wearable + phone data, social leaderboards, and beautiful graphs." />
+  <meta name="description" content="Index Health is a portfolio demo of a fitness platform that aggregates health metrics into one explainable 0–100 Index Score. Live deploy uses synthetic data only — no public sign-ups, no real user health data stored." />
   <link rel="canonical" href="https://lukehamilton2000.github.io/portfolio/index-health.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,7 +55,7 @@
     .content { max-width:var(--cw);margin:0 auto; }
     :focus-visible { outline:2px solid var(--accent);outline-offset:3px;border-radius:2px; }
 
-    .article-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .article-header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
     .header-content { flex: 1; }
     .article-header h1 { font-size:1.2rem;font-weight:500;line-height:1.25;letter-spacing:-0.02em;margin-bottom:10px; }
     .theme-toggle { background: none; border: none; padding: 4px; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: color 0.15s ease, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); margin-top: 2px; }
@@ -70,8 +70,14 @@
 
     .article-meta { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
     .meta-item { font-size:0.8125rem;color:var(--muted); }
-    .badge { font-size:0.625rem;font-weight:500;padding:1px 6px;border:1.5px solid var(--accent);color:var(--accent);letter-spacing:0.03em;line-height:1.6;border-radius:40% 60% 55% 45% / 55% 45% 55% 45%;transform:rotate(-1deg);display:inline-flex;flex-shrink:0; }
-    .badge-soon { border-color:var(--muted);color:var(--muted); }
+
+    .project-links { display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px; }
+    .project-links a { display:inline-flex;align-items:center;gap:7px;font-size:0.8125rem;color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:5px;padding:6px 12px;transition:border-color 0.15s,color 0.15s; }
+    .project-links a:hover { border-color:var(--accent);color:var(--accent); }
+    .project-links a.primary { border-color:var(--accent);color:var(--accent); }
+    .project-links a .arrow { font-size:0.75rem;color:var(--muted);transition:color 0.15s,transform 0.15s; }
+    .project-links a:hover .arrow, .project-links a.primary .arrow { color:var(--accent); }
+    .project-links a:hover .arrow { transform:translate(1px,-1px); }
 
     .article-body { border-top:1px solid var(--border);padding-top:36px; }
     .article-body section { margin-bottom:44px; }
@@ -79,28 +85,55 @@
     .article-body h2 { font-size:0.6875rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;scroll-margin-top:88px; }
     .article-body p { font-size:0.9375rem;margin-bottom:14px; }
     .article-body p:last-child { margin-bottom:0; }
+    .article-body strong { font-weight:500; }
+    .article-body code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82em;background:var(--card);border:1px solid var(--border);border-radius:3px;padding:0.5px 4px; }
+    .article-body ol { list-style:none;counter-reset:step; }
+    .article-body ol li { padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;align-items:baseline;gap:10px;counter-increment:step; }
+    .article-body ol li:first-child { border-top:1px solid var(--border); }
+    .article-body ol li::before { content:counter(step);color:var(--muted);flex-shrink:0;font-size:0.75rem;font-variant-numeric:tabular-nums;min-width:1.2em; }
     .article-body ul { list-style:none; }
     .article-body ul li { padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;align-items:baseline;gap:10px; }
     .article-body ul li:first-child { border-top:1px solid var(--border); }
     .article-body ul li::before { content:'-';color:var(--muted);flex-shrink:0;font-size:0.8125rem; }
+    .article-body a { color:inherit;text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:2px;transition:text-decoration-color 0.12s; }
+    .article-body a:hover { text-decoration-color:var(--text); }
+
+    .decision { padding:18px 0;border-bottom:1px solid var(--border); }
+    .decision:first-of-type { border-top:1px solid var(--border); }
+    .decision h3 { font-size:0.9rem;font-weight:500;letter-spacing:-0.01em;margin-bottom:12px; }
+    .decision .row { display:grid;grid-template-columns:78px 1fr;gap:2px 14px;font-size:0.9rem;margin-bottom:9px; }
+    .decision .row:last-child { margin-bottom:0; }
+    .decision .row .k { font-size:0.625rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);padding-top:4px; }
+    .decision .row.outcome .v { color:var(--text); }
 
     .tech-list { display:flex;flex-wrap:wrap;gap:6px; }
     .tech-tag { font-size:0.75rem;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:2px 8px;line-height:1.5; }
 
+    figure.shot { margin:0 0 18px; }
+    figure.shot .ph { border:1px dashed var(--border);border-radius:6px;background:var(--card);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px; }
+    figure.shot .ph span { font-size:0.75rem;color:var(--muted);line-height:1.5; }
+    figure.shot img { width:100%;border:1px solid var(--border);border-radius:6px;display:block; }
+    figure.shot figcaption { font-size:0.75rem;color:var(--muted);margin-top:8px; }
+
     footer { margin-top:64px;padding-top:18px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted); }
     @media (prefers-reduced-motion: reduce) { *,*::before,*::after { transition-duration:0.01ms !important;animation-duration:0.01ms !important; } }
     @media (max-width:980px) { .sidebar { display:none; } .mobile-back { display:inline-flex; } }
-    @media (max-width:480px) { body { padding:48px 18px 72px; } .demo-card { padding:18px; } }
+    @media (max-width:480px) {
+      body { padding:48px 18px 72px; }
+      .decision .row { grid-template-columns:1fr;gap:1px; }
+      .decision .row .k { padding-top:0; }
+    }
   </style>
 </head>
 <body>
   <div class="progress" id="progress"></div>
 
   <aside class="sidebar">
-    <a class="back" href="index.html">← Index</a>
+    <a class="back" href="index.html">← Home</a>
     <nav id="toc">
       <a href="#overview">Overview</a>
-      <a href="#the-score">The Index Score</a>
+      <a href="#pipeline">The Index scoring pipeline</a>
+      <a href="#decisions">Engineering decisions</a>
       <a href="#features">Features</a>
       <a href="#tech">Tech stack</a>
       <a href="#status">Status</a>
@@ -108,14 +141,13 @@
   </aside>
 
   <main class="content">
-    <a class="mobile-back" href="index.html">← Index</a>
+    <a class="mobile-back" href="index.html">← Home</a>
 
     <header class="article-header">
       <div class="header-content">
         <h1>Index Health</h1>
         <div class="article-meta">
           <time class="meta-item" datetime="2026">2026</time>
-          <span class="badge">Personal</span>
           <span class="meta-item" id="reading-time"></span>
         </div>
       </div>
@@ -125,74 +157,170 @@
       </button>
     </header>
 
+    <div class="project-links">
+      <a class="primary" href="https://index-health.dev/app/dashboard" target="_blank" rel="noopener">Live demo <span class="arrow">↗</span></a>
+      <a href="https://github.com/lukehamilton2000/index-health" target="_blank" rel="noopener">Source <span class="arrow">↗</span></a>
+    </div>
+
     <div class="article-body">
       <section id="overview">
         <h2>Overview</h2>
-        <p>Index Health collapses the metrics scattered across your watch, ring, and phone into one number: a <strong>Health Index</strong> from 0 to 100 that updates daily and trends over time.</p>
-        <p>It pulls from Apple Health, Google Fit, or connected wearables when they're present, and works without any of them. One trustworthy number, an explainable breakdown behind it, and a light social layer to keep the habit going.</p>
+        <p>Index Health is a fitness and wellness web app built around one number: the Index Score, a 0–100 aggregate of tracked health metrics across sleep, recovery, nutrition, body composition, and training load. The live site is a <strong>portfolio demo only</strong>: visitors explore the full UI through demo mode, which loads a deterministic 90-day synthetic dataset (fake persona, fake metrics, fake league). Public sign-ups are closed — I am not operating this as a health data service and do not store visitors' real health data.</p>
+
+        <!-- Replace .ph with: <img src="images/index-health-dashboard.png" alt="Today dashboard with Index Score, confidence bar, and driver cards" /> -->
+        <figure class="shot">
+          <div class="ph"><span>Screenshot: <code>index-health-dashboard.png</code><br />Today dashboard in demo mode</span></div>
+          <figcaption>Today dashboard in demo mode: synthetic metrics driving a 0–100 Index Score with confidence, deltas, and top drivers.</figcaption>
+        </figure>
       </section>
 
-      <section id="the-score">
-        <h2>The Index Score</h2>
-        <p>A weighted, explainable composite of sleep, movement consistency, recovery, cardiovascular load, and a few other signals. Every factor is inspectable, so the number is auditable rather than a black box.</p>
-        <ul>
-          <li>Tap any factor to see exactly how much it moved the score</li>
-          <li>Personal baselines that adapt to you, not a population average</li>
-          <li>Degrades gracefully when wearable data is missing</li>
-        </ul>
+      <section id="pipeline">
+        <h2>The Index scoring pipeline</h2>
+        <p>End-to-end flow from log ingestion through normalisation, weighted aggregation, score caching, and UI replay. On the public demo, every step runs against synthetic data — History and Today always agree on a given day's score because they share the same <code>computeIndex</code> function.</p>
+        <ol>
+          <li><strong>Ingest.</strong> In demo mode (the default visitor path), a seeded 90-day synthetic <code>HealthDataset</code> replaces all Supabase reads. Log forms exist in the UI but writes are blocked on the live demo.</li>
+          <li><strong>Validate.</strong> <code>logValidation.ts</code> enforces physiological bounds and date guards on every write. Invalid values are rejected before they can corrupt the score or charts.</li>
+          <li><strong>Persist.</strong> The codebase includes a Supabase Postgres layer with RLS, but the public deploy does not accept sign-ups or persist visitor data. Demo mode is read-only throughout.</li>
+          <li><strong>Normalise to sub-scores.</strong> <code>computeIndex()</code> maps each present metric to a 0–100 sub-score using age/sex-aware population reference ranges (HRV, RHR, VO₂ norms) or user-specific targets (weight vs goal, calories vs daily goal). BMI is calculated from latest weight and profile height. Workout frequency uses a 7-day rolling window.</li>
+          <li><strong>Aggregate.</strong> Weighted mean over present metrics only. A coverage ceiling (<code>min(100, 58 + tracked × 7)</code>) caps the achievable score when few metrics are tracked. Confidence = tracked / 6. Absent metrics are excluded, not penalised as zero-weight.</li>
+          <li><strong>Cache for social.</strong> In a live account, <code>clientData.ts</code> would recompute the score and upsert <code>user_score_cache</code> for leaderboard queries. Demo mode fakes the league table from synthetic data instead.</li>
+          <li><strong>Display and replay.</strong> Today dashboard shows hero score, confidence bar, driver cards, and coaching tips. History replays <code>computeIndex</code> as-of each logged day. Metrics drills into per-metric series, live Pearson correlations, and distribution histograms.</li>
+        </ol>
+        <p>Nine metrics currently feed the score (HRV 14%, Sleep 14%, Resting HR 10%, Workouts 10%, Steps 8%, Calories 6%, Weight 6%, Run/cardio 5%, BMI 4%). VO₂ Max and TDEE slots are reserved but display-only today — estimated values are computed for the UI and deliberately excluded from the Index to avoid double-counting RHR.</p>
+
+        <!-- Replace .ph with: <img src="images/index-health-metrics.png" alt="Per-metric drill-down with trend chart and correlations" /> -->
+        <figure class="shot">
+          <div class="ph"><span>Screenshot: <code>index-health-metrics.png</code><br />Metrics screen with HRV or Sleep selected</span></div>
+          <figcaption>Per-metric drill-down in demo mode: Pearson correlations computed from the synthetic daily logs.</figcaption>
+        </figure>
+      </section>
+
+      <section id="decisions">
+        <h2>Engineering decisions</h2>
+
+        <div class="decision">
+          <h3>Scoring engine design</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">A single health number is easy to game or misread if the model is opaque, if missing data is treated as zero, or if estimated metrics double-count real inputs.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v"><code>computeIndex()</code> is the single source of truth with public <code>METRIC_WEIGHTS</code>, explicit per-metric <code>lerp()</code> reference functions, a <code>present</code> flag per metric, and a coverage ceiling so one strong cherry-picked metric cannot read as a top Index. VO₂/TDEE stay display-only.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Tested scoring with bounded 0–100 guarantees, graceful degradation, and an inspectable driver breakdown on the dashboard.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Static export architecture</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Ship a Next.js app to Vercel static hosting and Capacitor native shells without a Node server, while the codebase still explores browser-side data patterns.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v"><code>output: 'export'</code> in <code>next.config.ts</code>. All data fetching and mutations run in the browser via <code>@supabase/supabase-js</code>. The <code>actions/</code> folder holds client-callable async functions, not server actions.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">One build artefact (<code>out/</code>) serves web (Vercel) and native (Capacitor <code>webDir: 'out'</code>). Tradeoff: no SSR, no API routes, CSP requires <code>unsafe-inline</code> for scripts/styles.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Demo-only data on the live deploy</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Showcase a convincing health product UI without collecting or storing real visitor health data.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Demo mode returns a seeded 90-day synthetic <code>HealthDataset</code> (fake persona, metrics, and league). Sign-ups are closed; writes are blocked. The codebase also has a showcase decrypt path and Supabase fetchers for architecture exploration, but the public demo path is synthetic only.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Recruiters can explore the full app with zero account and zero real health data involved.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Supabase schema, RLS, and score cache</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">If this were a real multi-user health app, social features would need to expose scores without leaking underlying logs.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">9 Postgres tables + 2 views in the repo, all RLS-scoped to <code>auth.uid()</code>. Social layer designed to expose only <code>user_score_cache</code> fields for opted-in users. Not exercised on the public demo.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Schema and RLS patterns are in the codebase as an architecture exercise; the live deploy runs on fake data instead.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Privacy / social layer</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Social comparison needs a single comparable number without exposing underlying health records.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Opt-in via <code>social_opted_in</code> (Settings + Sources). Friends see Index Score cache only. <code>buildLeague()</code> falls back to global top-10 when no friends exist.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Working friends flow (search, request, accept/decline) with minimal data surface. Demo mode fakes a 5-person league for screenshots.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Hand-rolled SVG charting</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Chart libraries add bundle weight and fight the brutalist flat design; static export limits server-side rendering tricks.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Custom SVG in <code>TrendChart.tsx</code>, inline mini charts in History/Metrics/Dashboard. Score history replays <code>computeIndex</code> per day rather than caching a separate series.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Zero chart-library dependency. History and Today always agree on the same date's score.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Closed sign-ups, demo-first entry</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Portfolio demo must not accept public accounts or store real health data from visitors.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Public sign-ups are disabled. Landing and login CTAs launch demo mode with synthetic data. Auth UI exists in the codebase for development, but visitors never need credentials.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">The live site is unambiguously a demo — not a consumer health data product.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Testing and verification</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Scoring, crypto, and validation logic must be defensible in a hiring conversation without manual QA alone.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v"><code>pnpm test</code> runs 10 files via Node's built-in <code>node:test</code> (indexScore, derived, suggestions, logValidation, records, units, league, goalProgress, showcaseCrypto, utils).</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Core algorithms have automated coverage. No CI workflow in repo; no E2E browser tests.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Graceful degradation when integrations fail</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Wearable OAuth is not live; users will have partial datasets for months in a real launch.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Scoring excludes absent metrics, caps score by coverage, shows confidence UI. Sources page marks all non-manual integrations as "Planned." <code>provider-sync</code> Edge Function exists server-side but client connect/sync was removed.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Demo mode stays fully usable with synthetic partial datasets. Missing integrations show as empty metric slots, not broken screens.</span></div>
+        </div>
       </section>
 
       <section id="features">
-        <h2>Key Features</h2>
+        <h2>Features</h2>
         <ul>
-          <li>Unified Health Index computed from wearables and phone sensors</li>
-          <li>Trend graphs built for reading at a glance</li>
-          <li>Friend leaderboards, private or public</li>
-          <li>No hardware required: Apple Health or Google Fit is enough</li>
-          <li>Data ingestion from Oura, Whoop, Fitbit, and Garmin</li>
-          <li>Daily explainable breakdown with actionable next steps</li>
-          <li>Live updates via Supabase Realtime when friends' scores change</li>
+          <li>Demo mode (default): deterministic 90-day synthetic persona with fake metrics across all screens</li>
+          <li>Index Score hero on Today dashboard with tier ramp, 1d/7d/30d deltas, and logging streak</li>
+          <li>Confidence indicator showing how many metrics back the current score (6-signal calibration target)</li>
+          <li>Per-metric driver cards ranked by Index impact and rule-based coaching tips</li>
+          <li>Metrics screen: trend chart, Pearson correlations, distribution histogram — all from synthetic demo data</li>
+          <li>History: 90-day Index score chart replayed from demo logs, personal records, range selector (1W–1Y)</li>
+          <li>Social: fake 5-person league table in demo mode (friend search and real accounts not active publicly)</li>
+          <li>Log, Settings, and onboarding UI shells (writes blocked on the live demo; sign-ups closed)</li>
         </ul>
+
+        <!-- Replace .ph with: <img src="images/index-health-history.png" alt="90-day Index score chart and personal records" /> -->
+        <figure class="shot">
+          <div class="ph"><span>Screenshot: <code>index-health-history.png</code><br />History screen with 90-day chart</span></div>
+          <figcaption>History in demo mode: the scoring function replayed per day on synthetic logs.</figcaption>
+        </figure>
+
+        <!-- Replace .ph with: <img src="images/index-health-social.png" alt="Friends league table with ranks and 7-day deltas" /> -->
+        <figure class="shot">
+          <div class="ph"><span>Screenshot: <code>index-health-social.png</code><br />Social league table in demo mode</span></div>
+          <figcaption>Social screen in demo mode: synthetic league table with fake ranks and deltas.</figcaption>
+        </figure>
       </section>
 
       <section id="tech">
         <h2>Tech stack</h2>
         <div class="tech-list">
-          <span class="tech-tag">React</span>
-          <span class="tech-tag">TypeScript</span>
-          <span class="tech-tag">Supabase</span>
-          <span class="tech-tag">Supabase Realtime</span>
-          <span class="tech-tag">Netlify</span>
-          <span class="tech-tag">Netlify Functions</span>
-          <span class="tech-tag">Recharts / custom SVG</span>
-          <span class="tech-tag">Apple HealthKit</span>
+          <span class="tech-tag">Next.js 16</span><span class="tech-tag">App Router</span>
+          <span class="tech-tag">Static export</span><span class="tech-tag">React 19</span>
+          <span class="tech-tag">TypeScript</span><span class="tech-tag">Supabase</span>
+          <span class="tech-tag">Postgres + RLS</span><span class="tech-tag">Edge Functions</span>
+          <span class="tech-tag">Capacitor 8</span><span class="tech-tag">Hand-rolled SVG</span>
+          <span class="tech-tag">Web Crypto API</span><span class="tech-tag">node:test</span>
+          <span class="tech-tag">Vercel</span>
         </div>
       </section>
 
       <section id="status">
         <h2>Status</h2>
-        <p>In active development. The scoring engine and frontend are working; social features and wearable integrations are in progress.</p>
-        <p>I built it because understanding how I was doing meant opening five apps and reconciling them by eye. One number, an honest breakdown, a bit of friendly competition.</p>
+        <p>Index Health is a 2026 portfolio demo: a statically exported Next.js fitness app with a tested scoring engine and full product UI. It ships live at <a href="https://index-health.dev" target="_blank" rel="noopener">index-health.dev</a>; source is on <a href="https://github.com/lukehamilton2000/index-health" target="_blank" rel="noopener">GitHub</a>. The live deploy runs on <strong>synthetic demo data only</strong> — public sign-ups are closed and I do not store visitors' real health data.</p>
+        <p>What is shipped for the demo: the full UI shell, Index Score computation with missing-data rules, deterministic 90-day fake dataset, social league UI with synthetic standings, and unit-tested core libraries. What is not: a live consumer health data service, wearable OAuth, App Store submission, or production operation of the Supabase backend for public users.</p>
+        <p>The technical highlight is the scoring pipeline: a single pure function (<code>computeIndex</code>) with public weights, explicit presence semantics, coverage capping, and day-replay consistency across Dashboard, Metrics, and History — all exercisable on fake data without touching a real database.</p>
       </section>
     </div>
 
-    <footer>
-      <span>London, <span id="local-time">Loading…</span></span>
-    </footer>
+    <footer id="local-time">Loading…</footer>
   </main>
 
   <script>
-    // Reading time
     const words = document.querySelector('.article-body').textContent.trim().split(/\s+/).length;
     document.getElementById('reading-time').textContent = Math.max(1, Math.round(words / 200)) + ' min read';
 
-    // Scroll progress
     window.addEventListener('scroll', () => {
       document.getElementById('progress').style.width =
         Math.min(window.scrollY / (document.body.scrollHeight - innerHeight) * 100, 100) + '%';
     }, { passive: true });
 
-    // Active TOC
     const secs = document.querySelectorAll('.article-body section[id]');
     const links = document.querySelectorAll('#toc a');
     secs.forEach(s => new IntersectionObserver(es => es.forEach(e => {
@@ -203,13 +331,11 @@
       }
     }), { rootMargin: '-20% 0px -70% 0px' }).observe(s));
 
-    // Keyboard nav
     document.addEventListener('keydown', e => {
       if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
       if (e.key === 'Escape' || e.key === 'h') window.location.href = 'index.html';
     });
 
-    // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
@@ -221,7 +347,6 @@
       });
     }
 
-    // London time
     function tickTime() {
       const el = document.getElementById('local-time');
       if (el) el.textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}) + ' in London';
