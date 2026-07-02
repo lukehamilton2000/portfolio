@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f0" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111110" />
-  <title>SpellType — Luke Hamilton</title>
+  <title>SpellType - Luke Hamilton</title>
   <meta name="description" content="SpellType is an audio-first spelling trainer inspired by MonkeyType. A case study on re-architecting the voice pipeline, server-side anti-cheat, and SEO at scale." />
   <link rel="canonical" href="https://lukehamilton2000.github.io/portfolio/spelltype.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -93,7 +93,7 @@
     .article-body ul { list-style:none; }
     .article-body ul li { padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;align-items:baseline;gap:10px; }
     .article-body ul li:first-child { border-top:1px solid var(--border); }
-    .article-body ul li::before { content:'—';color:var(--muted);flex-shrink:0;font-size:0.8125rem; }
+    .article-body ul li::before { content:'-';color:var(--muted);flex-shrink:0;font-size:0.8125rem; }
 
     /* Problem → Approach → Outcome decision blocks */
     .decision { padding:18px 0;border-bottom:1px solid var(--border); }
@@ -107,7 +107,7 @@
     .tech-list { display:flex;flex-wrap:wrap;gap:6px; }
     .tech-tag { font-size:0.75rem;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:2px 8px;line-height:1.5; }
 
-    /* Screenshot placeholders — replace the inner box with an <img> (see comments) */
+    /* Screenshot placeholders: replace the inner box with an <img> (see comments) */
     figure.shot { margin:0 0 18px; }
     figure.shot .ph { border:1px dashed var(--border);border-radius:6px;background:var(--card);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px; }
     figure.shot .ph span { font-size:0.75rem;color:var(--muted);line-height:1.5; }
@@ -147,7 +147,6 @@
         <h1>SpellType</h1>
         <div class="article-meta">
           <time class="meta-item" datetime="2026">2026</time>
-          <span class="badge badge-new">New</span>
           <span class="meta-item" id="reading-time"></span>
         </div>
       </div>
@@ -180,7 +179,7 @@
         <div class="decision">
           <h3>From live neural TTS to pre-rendered audio</h3>
           <div class="row"><span class="k">Problem</span><span class="v">v1 ran a neural TTS model in-browser: ONNX over WebAssembly, ~400MB. Synthesis ran on the main thread, so every spoken word blocked rendering and janked the UI, on top of a punishing cold start.</span></div>
-          <div class="row"><span class="k">Approach</span><span class="v">Moved synthesis offline. A build-time Node script runs the same model once across all ~1,800 words and encodes them to MP3, shipped as static assets behind a manifest with the platform voice as fallback. Per-word speed is set at playback via <code>HTMLAudio.playbackRate</code> — one recording per word instead of re-synthesising for every speed.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Moved synthesis offline. A build-time Node script runs the same model once across all ~1,800 words and encodes them to MP3, shipped as static assets behind a manifest with the platform voice as fallback. Per-word speed is set at playback via <code>HTMLAudio.playbackRate</code>: one recording per word instead of re-synthesising for every speed.</span></div>
           <div class="row outcome"><span class="k">Outcome</span><span class="v">Instant, jank-free playback. The 400MB runtime dependency dropped to ~22MB of static files, with identical audio quality and the same speed control.</span></div>
         </div>
 
@@ -194,7 +193,7 @@
         <h2>Engineering decisions</h2>
         <div class="decision">
           <h3>Reliable autoplay on mobile</h3>
-          <div class="row"><span class="k">Problem</span><span class="v">iOS and Android only allow audio triggered by a user gesture. The first word plays after a 3-2-1 countdown, by which point the starting tap has expired — so the browser silently drops it.</span></div>
+          <div class="row"><span class="k">Problem</span><span class="v">iOS and Android only allow audio triggered by a user gesture. The first word plays after a 3-2-1 countdown, by which point the starting tap has expired, so the browser silently drops it.</span></div>
           <div class="row"><span class="k">Approach</span><span class="v">Unlock a single persistent <code>&lt;audio&gt;</code> element inside the tap, then reuse that one element for every word in the session.</span></div>
           <div class="row outcome"><span class="k">Outcome</span><span class="v">The countdown-delayed first word plays reliably on mobile, where per-word element creation fails silently.</span></div>
         </div>

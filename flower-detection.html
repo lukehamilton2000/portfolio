@@ -7,7 +7,7 @@
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f0" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111110" />
-  <title>Autonomous Flower Detection — Luke Hamilton</title>
+  <title>Autonomous Flower Detection - Luke Hamilton</title>
   <meta name="description" content="MSc dissertation: real-time flower detection and tracking system for precision agriculture robotics." />
   <link rel="canonical" href="https://lukehamilton2000.github.io/portfolio/flower-detection.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,7 +22,7 @@
     :root, :root[data-theme="light"] {
       --bg: #f5f5f0; --text: #1a1a1a; --muted: #aaa; --muted-hover: #444;
       --border: #e2e2dc; --accent: #5b6af0;
-      --cw: 580px; /* content width — must match index */
+      --cw: 580px; /* content width: must match index */
     }
     :root[data-theme="dark"] {
       --bg: #111110; --text: #e6e6e2; --muted: #555; --muted-hover: #999; --border: #2a2a28; --accent: #818cf8;
@@ -71,7 +71,7 @@
     .sidebar nav a:hover { color: var(--muted-hover); }
     .sidebar nav a.active { color: var(--text); border-left-color: var(--text); }
 
-    /* Mobile back — shown only when sidebar hidden */
+    /* Mobile back: shown only when sidebar hidden */
     .mobile-back {
       display: none;
       align-items: center; gap: 5px; font-size: 0.8125rem;
@@ -80,7 +80,7 @@
     }
     .mobile-back:hover { color: var(--text); }
 
-    /* ── Content — same centering as index ── */
+    /* Content: same centering as index */
     .content { max-width: var(--cw); margin: 0 auto; }
 
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
@@ -132,7 +132,7 @@
       font-size: 0.9rem; display: flex; align-items: baseline; gap: 10px;
     }
     .article-body ul li:first-child { border-top: 1px solid var(--border); }
-    .article-body ul li::before { content: '—'; color: var(--muted); flex-shrink: 0; font-size: 0.8125rem; }
+    .article-body ul li::before { content: '-'; color: var(--muted); flex-shrink: 0; font-size: 0.8125rem; }
     .tech-list { display: flex; flex-wrap: wrap; gap: 6px; }
     .tech-tag {
       font-size: 0.75rem; color: var(--muted); border: 1px solid var(--border);
@@ -189,7 +189,7 @@
       <section id="overview">
         <h2>Overview</h2>
         <p>My MSc Biorobotics dissertation at the University of Bristol: a real-time computer vision pipeline that detects and tracks flowers for autonomous pollination robots operating in live plant canopies.</p>
-        <p>The hard part was reliability in the field — variable lighting, leaf occlusion, flowers at arbitrary angles. I fine-tuned YOLOv8 via transfer learning on a custom dataset I annotated across growth stages and lighting conditions, then got it running on embedded hardware at frame rate.</p>
+        <p>The hard part was reliability in the field: variable lighting, leaf occlusion, flowers at arbitrary angles. I fine-tuned YOLOv8 via transfer learning on a custom dataset I annotated across growth stages and lighting conditions, then got it running on embedded hardware at frame rate.</p>
       </section>
       <section id="built">
         <h2>What I built</h2>
@@ -212,7 +212,7 @@
       </section>
       <section id="impact">
         <h2>Impact</h2>
-        <p>The pipeline held detection accuracy under field conditions and ran fast enough on-device to feed live coordinates to a manipulator arm — the bar for closing the loop on autonomous pollination. The motivation is real: pollinator decline is a genuine threat to crop yields, and robotic pollination is one credible response.</p>
+        <p>The pipeline held detection accuracy under field conditions and ran fast enough on-device to feed live coordinates to a manipulator arm, the bar for closing the loop on autonomous pollination. The motivation is real: pollinator decline is a genuine threat to crop yields, and robotic pollination is one credible response.</p>
       </section>
     </div>
 

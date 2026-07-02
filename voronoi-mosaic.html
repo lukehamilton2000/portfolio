@@ -1,0 +1,323 @@
+<!-- Built by hand. HTML, CSS, vanilla JS. No frameworks, no build tools. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f0" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111110" />
+  <title>Voronoi Mosaic - Luke Hamilton</title>
+  <meta name="description" content="Browser-based Voronoi mosaic generator. Upload a photo, tune cell placement and color sampling, export PNG up to 8K or seed/cell JSON." />
+  <link rel="canonical" href="https://lukehamilton2000.github.io/portfolio/voronoi-mosaic.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root, :root[data-theme="light"] {
+      --bg:#f5f5f0; --text:#1a1a1a; --muted:#aaa; --muted-hover:#444; --border:#e2e2dc;
+      --accent:#5b6af0; --accent-light:#818cf8; --cw:580px;
+      --card:#fff; --card-dark:#1a1a18;
+    }
+    :root[data-theme="dark"] {
+      --bg:#111110; --text:#e6e6e2; --muted:#555; --muted-hover:#999; --border:#2a2a28;
+      --accent:#818cf8; --accent-light:#a5b4fc; --cw:580px;
+      --card:#1a1a18; --card-dark:#111110;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg:#111110; --text:#e6e6e2; --muted:#555; --muted-hover:#999; --border:#2a2a28;
+        --accent:#818cf8; --accent-light:#a5b4fc; --cw:580px;
+        --card:#1a1a18; --card-dark:#111110;
+      }
+    }
+    html { font-size: 15px; }
+    body {
+      background:var(--bg); color:var(--text);
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      font-size:1rem; line-height:1.6; padding:72px 24px 100px; -webkit-font-smoothing:antialiased;
+    }
+    .progress { position:fixed;top:0;left:0;height:1.5px;width:0%;background:var(--text);z-index:100;transition:width 0.08s linear; }
+    .sidebar { position:fixed;top:72px;left:calc(50% - 478px);width:140px; }
+    .sidebar .back { display:inline-flex;align-items:center;gap:5px;font-size:0.8125rem;color:var(--muted);text-decoration:none;margin-bottom:28px;transition:color 0.12s; }
+    .sidebar .back:hover { color:var(--text); }
+    .sidebar nav { display:flex;flex-direction:column; }
+    .sidebar nav a { font-size:0.75rem;color:var(--muted);text-decoration:none;padding:5px 0 5px 10px;margin-left:-12px;line-height:1.4;border-left:2px solid transparent;transition:color 0.12s,border-color 0.12s; }
+    .sidebar nav a:hover { color:var(--muted-hover); }
+    .sidebar nav a.active { color:var(--text);border-left-color:var(--text); }
+    .mobile-back { display:none;align-items:center;gap:5px;font-size:0.8125rem;color:var(--muted);text-decoration:none;margin-bottom:40px;transition:color 0.12s; }
+    .mobile-back:hover { color:var(--text); }
+    .content { max-width:var(--cw);margin:0 auto; }
+    :focus-visible { outline:2px solid var(--accent);outline-offset:3px;border-radius:2px; }
+
+    .article-header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .header-content { flex: 1; }
+    .article-header h1 { font-size:1.2rem;font-weight:500;line-height:1.25;letter-spacing:-0.02em;margin-bottom:10px; }
+    .theme-toggle { background: none; border: none; padding: 4px; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: color 0.15s ease, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); margin-top: 2px; }
+    .theme-toggle:hover { color: var(--text); }
+    .theme-toggle:active { transform: scale(0.9); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle #sun-icon { display: none; }
+    .theme-toggle #moon-icon { display: block; }
+    :root[data-theme="dark"] .theme-toggle #sun-icon { display: block; }
+    :root[data-theme="dark"] .theme-toggle #moon-icon { display: none; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme-toggle #sun-icon { display: block; } :root:not([data-theme="light"]) .theme-toggle #moon-icon { display: none; } }
+
+    .article-meta { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .meta-item { font-size:0.8125rem;color:var(--muted); }
+    .badge { font-size:0.625rem;font-weight:500;padding:1px 6px;border:1.5px solid var(--accent);color:var(--accent);letter-spacing:0.03em;line-height:1.6;border-radius:40% 60% 55% 45% / 55% 45% 55% 45%;transform:rotate(-1deg);display:inline-flex;flex-shrink:0; }
+    .badge-new { border-color:#22c55e;color:#22c55e; }
+
+    .project-links { display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px; }
+    .project-links a { display:inline-flex;align-items:center;gap:7px;font-size:0.8125rem;color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:5px;padding:6px 12px;transition:border-color 0.15s,color 0.15s; }
+    .project-links a:hover { border-color:var(--accent);color:var(--accent); }
+    .project-links a.primary { border-color:var(--accent);color:var(--accent); }
+    .project-links a .arrow { font-size:0.75rem;color:var(--muted);transition:color 0.15s,transform 0.15s; }
+    .project-links a:hover .arrow, .project-links a.primary .arrow { color:var(--accent); }
+    .project-links a:hover .arrow { transform:translate(1px,-1px); }
+
+    .article-body { border-top:1px solid var(--border);padding-top:36px; }
+    .article-body section { margin-bottom:44px; }
+    .article-body section:last-child { margin-bottom:0; }
+    .article-body h2 { font-size:0.6875rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;scroll-margin-top:88px; }
+    .article-body p { font-size:0.9375rem;margin-bottom:14px; }
+    .article-body p:last-child { margin-bottom:0; }
+    .article-body strong { font-weight:500; }
+    .article-body code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.82em;background:var(--card);border:1px solid var(--border);border-radius:3px;padding:0.5px 4px; }
+    .article-body ol { list-style:none;counter-reset:step; }
+    .article-body ol li { padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;align-items:baseline;gap:10px;counter-increment:step; }
+    .article-body ol li:first-child { border-top:1px solid var(--border); }
+    .article-body ol li::before { content:counter(step);color:var(--muted);flex-shrink:0;font-size:0.75rem;font-variant-numeric:tabular-nums;min-width:1.2em; }
+    .article-body ul { list-style:none; }
+    .article-body ul li { padding:9px 0;border-bottom:1px solid var(--border);font-size:0.9rem;display:flex;align-items:baseline;gap:10px; }
+    .article-body ul li:first-child { border-top:1px solid var(--border); }
+    .article-body ul li::before { content:'-';color:var(--muted);flex-shrink:0;font-size:0.8125rem; }
+    .article-body a { color:inherit;text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:2px;transition:text-decoration-color 0.12s; }
+    .article-body a:hover { text-decoration-color:var(--text); }
+
+    .decision { padding:18px 0;border-bottom:1px solid var(--border); }
+    .decision:first-of-type { border-top:1px solid var(--border); }
+    .decision h3 { font-size:0.9rem;font-weight:500;letter-spacing:-0.01em;margin-bottom:12px; }
+    .decision .row { display:grid;grid-template-columns:78px 1fr;gap:2px 14px;font-size:0.9rem;margin-bottom:9px; }
+    .decision .row:last-child { margin-bottom:0; }
+    .decision .row .k { font-size:0.625rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);padding-top:4px; }
+    .decision .row.outcome .v { color:var(--text); }
+
+    .tech-list { display:flex;flex-wrap:wrap;gap:6px; }
+    .tech-tag { font-size:0.75rem;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:2px 8px;line-height:1.5; }
+
+    figure.shot { margin:0 0 18px; }
+    figure.shot .ph { border:1px dashed var(--border);border-radius:6px;background:var(--card);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px; }
+    figure.shot .ph span { font-size:0.75rem;color:var(--muted);line-height:1.5; }
+    figure.shot img { width:100%;border:1px solid var(--border);border-radius:6px;display:block; }
+    figure.shot figcaption { font-size:0.75rem;color:var(--muted);margin-top:8px; }
+
+    footer { margin-top:64px;padding-top:18px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted); }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { transition-duration:0.01ms !important;animation-duration:0.01ms !important; } }
+    @media (max-width:980px) { .sidebar { display:none; } .mobile-back { display:inline-flex; } }
+    @media (max-width:480px) {
+      body { padding:48px 18px 72px; }
+      .decision .row { grid-template-columns:1fr;gap:1px; }
+      .decision .row .k { padding-top:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+
+  <aside class="sidebar">
+    <a class="back" href="index.html">← Index</a>
+    <nav id="toc">
+      <a href="#overview">Overview</a>
+      <a href="#pipeline">The mosaic pipeline</a>
+      <a href="#decisions">Engineering decisions</a>
+      <a href="#features">Features</a>
+      <a href="#tech">Tech stack</a>
+      <a href="#status">Status</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <a class="mobile-back" href="index.html">← Index</a>
+
+    <header class="article-header">
+      <div class="header-content">
+        <h1>Voronoi Mosaic</h1>
+        <div class="article-meta">
+          <time class="meta-item" datetime="2026">2026</time>
+          <span class="badge badge-new">New</span>
+          <span class="meta-item" id="reading-time"></span>
+        </div>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+    </header>
+
+    <div class="project-links">
+      <a class="primary" href="https://voronoi-mosaic.vercel.app/" target="_blank" rel="noopener">Live demo <span class="arrow">↗</span></a>
+      <a href="https://github.com/lukehamilton2000/Voronoi-Mosaic" target="_blank" rel="noopener">Source <span class="arrow">↗</span></a>
+    </div>
+
+    <div class="article-body">
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>Voronoi Mosaic is a browser-based image stylization tool: upload a photo and it becomes a mosaic of Voronoi cells, each colored from the pixels inside it. Sliders control how many cells you get, how seeds are placed, how colors are sampled, and whether cells have borders, then export a PNG at up to 8K or dump the seed layout as JSON.</p>
+        <p>Under the hood it's computational geometry (Delaunay/Voronoi, Lloyd relaxation), image processing (Sobel-guided placement, per-cell color stats), and deliberate performance caching so 2,000 cells on a 4K source stays usable. The rest of this page covers how it's built.</p>
+
+        <figure class="shot">
+          <img src="images/voronoi-mosaic-default.png" alt="Uploaded photo transformed into a Voronoi cell mosaic with default settings" />
+          <figcaption>Default mosaic: seeded cells sampled from the source image.</figcaption>
+        </figure>
+      </section>
+
+      <section id="pipeline">
+        <h2>The mosaic pipeline</h2>
+        <p>Each regeneration runs the same sequence: geometry and color are cached where possible so only the affected pass reruns.</p>
+        <ol>
+          <li>Decode the uploaded image to a capped sample surface</li>
+          <li>Place seeds: random, jittered grid, or edge-weighted via a Sobel magnitude field</li>
+          <li>Build a Delaunay triangulation, then derive the Voronoi diagram with <code>d3-delaunay</code></li>
+          <li>Optionally run Lloyd relaxation (0–5 passes) for more uniform cell shapes</li>
+          <li>Sample per-cell color: average, median, or dominant</li>
+          <li>Paint filled cells on Canvas 2D; borders are a separate stroke pass</li>
+          <li>Export PNG at the chosen resolution, or JSON of seed and cell data</li>
+        </ol>
+
+        <figure class="shot">
+          <img src="images/voronoi-mosaic-controls.png" alt="Voronoi Mosaic app with mosaic canvas and controls panel" />
+          <figcaption>Schema-driven controls map directly to runtime state and export.</figcaption>
+        </figure>
+      </section>
+
+      <section id="decisions">
+        <h2>Engineering decisions</h2>
+
+        <div class="decision">
+          <h3>Voronoi geometry at scale</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Up to 2,000 cells on large canvases (4K source, render scale 2) must stay interactive while sliders change.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v"><code>d3-delaunay</code> for Delaunay/Voronoi construction; nearest-seed queries via <code>delaunay.find</code> with hints, not brute-force per pixel; Lloyd relaxation rebuilds the diagram per iteration.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Smooth cell-count and relaxation controls without freezing the UI.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Edge-weighted seed placement</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Random and jittered layouts ignore image structure, so detail gets lost in flat regions.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">A coarse Sobel edge-magnitude field biases seed placement toward high-contrast regions; a deterministic PRNG reproduces layouts per seed value.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Detail-aware mosaics on structured photos.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Render pipeline caching</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Recomputing geometry and per-cell color on every border, background, or zoom tweak is wasteful.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Cache geometry and color on a key that excludes border, appearance, and render-scale-only changes; borders and background only re-stroke or refill; viewport zoom is CSS-only and does not invalidate the heavy pass.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Slider drags and zoom stay responsive at the heaviest workload (2,000 cells, 3840×2160 source, render scale 2).</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Canvas 2D over SVG/WebGL</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">SVG and WebGL look attractive for visual apps, but add complexity for a mostly static render.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Canvas 2D: one fill pass for up to 2,000 cells; color sampling is a one-time cached preprocess, so WebGL setup adds cost without per-frame shader benefit.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Simpler pipeline; measured performance budgets passed.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Schema-driven product shell</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Many controls must map cleanly to runtime state and export.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Toolcraft runtime: declarative schema drives controls; custom <code>canvasContent</code> renderer; sticky footer export; standard PNG export helper with 2K/4K/8K resolution.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v">Every visible control affects observable output; reset and export covered by acceptance tests.</span></div>
+        </div>
+
+        <div class="decision">
+          <h3>Testing discipline</h3>
+          <div class="row"><span class="k">Problem</span><span class="v">Visual and interactive apps regress easily.</span></div>
+          <div class="row"><span class="k">Approach</span><span class="v">Vitest for engine, schema, and scenarios; Playwright browser acceptance for upload/transform/clear, controls, and export; declared performance scenarios with stress fixtures.</span></div>
+          <div class="row outcome"><span class="k">Outcome</span><span class="v"><code>pnpm verify:final</code> gate covering docs integrity, unit tests, build, browser acceptance.</span></div>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2>Features</h2>
+        <ul>
+          <li>Upload source image with rotate/flip transforms</li>
+          <li>20–2,000 Voronoi cells: Random / Jittered / Edge-weighted distribution</li>
+          <li>Lloyd relaxation (0–5 passes)</li>
+          <li>Per-cell color: Average / Median / Dominant</li>
+          <li>Optional cell borders (width, stroke color/opacity)</li>
+          <li>Regenerate seed layout on demand</li>
+          <li>PNG export at 2K / 4K / 8K; JSON export of seed/cell data</li>
+          <li>Canvas zoom, undo/redo, theme toggle</li>
+          <li>Background include toggle for PNG export preview</li>
+        </ul>
+      </section>
+
+      <section id="tech">
+        <h2>Tech stack</h2>
+        <div class="tech-list">
+          <span class="tech-tag">React 19</span><span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Vite</span><span class="tech-tag">Canvas 2D</span>
+          <span class="tech-tag">d3-delaunay</span><span class="tech-tag">React Router</span>
+          <span class="tech-tag">Tailwind CSS</span><span class="tech-tag">Playwright</span>
+          <span class="tech-tag">Vitest</span>
+        </div>
+      </section>
+
+      <section id="status">
+        <h2>Status</h2>
+        <p>Built 2026. Personal creative tooling, live at <a href="https://voronoi-mosaic.vercel.app/" target="_blank" rel="noopener">voronoi-mosaic.vercel.app</a>, source on <a href="https://github.com/lukehamilton2000/Voronoi-Mosaic" target="_blank" rel="noopener">GitHub</a>.</p>
+        <p>Verification: Vitest unit tests, Playwright acceptance, and performance scenarios behind a single <code>pnpm verify:final</code> gate.</p>
+      </section>
+    </div>
+
+    <footer id="local-time">Loading…</footer>
+  </main>
+
+  <script>
+    const words = document.querySelector('.article-body').textContent.trim().split(/\s+/).length;
+    document.getElementById('reading-time').textContent = Math.max(1, Math.round(words / 200)) + ' min read';
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('progress').style.width =
+        Math.min(window.scrollY / (document.body.scrollHeight - innerHeight) * 100, 100) + '%';
+    }, { passive: true });
+
+    const secs = document.querySelectorAll('.article-body section[id]');
+    const links = document.querySelectorAll('#toc a');
+    secs.forEach(s => new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`#toc a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    }), { rootMargin: '-20% 0px -70% 0px' }).observe(s));
+
+    document.addEventListener('keydown', e => {
+      if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.key === 'Escape' || e.key === 'h') window.location.href = 'index.html';
+    });
+
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+                      (!document.documentElement.hasAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        const newTheme = isDark ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+    }
+
+    function tickTime() {
+      const el = document.getElementById('local-time');
+      if (el) el.textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}) + ' in London';
+    }
+    tickTime(); setInterval(tickTime, 10000);
+  </script>
+</body>
+</html>
