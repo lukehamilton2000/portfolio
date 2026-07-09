@@ -16,16 +16,26 @@ adjacent HTML comment.
 
 PNG preferred. Landscape orientation looks best with the case-study layout.
 
-## Index Health (`index-health.html`)
+## Index (`index-health.html`)
 
-Capture from live demo at [index-health.dev](https://index-health.dev) (landing → Try the live demo).
+Capture from live demo at [index-health.dev](https://index-health.dev) (landing → open demo; sample data, no account).
 
 | Filename | Shot |
 |---|---|
-| `index-health-dashboard.png` | Today dashboard: hero Index Score, confidence bar, driver cards |
-| `index-health-metrics.png` | Metrics screen with HRV or Sleep: trend chart, correlations |
-| `index-health-history.png` | History: 90-day Index chart + personal records row |
-| `index-health-social.png` | Social: league table with ranks and 7-day deltas |
+| `index-health-landing.png` | Landing: portfolio strip + why-closed card |
+| `index-health-dashboard.png` | Today: Index Score, confidence, Why this score / drivers |
+| `index-health-metrics.png` | Metrics: metric detail + hand-rolled TrendChart |
+| `index-health-history.png` | History: multi-year trend + range chips |
+| `index-health-log.png` | Log: form UI with demo read-only honesty |
+| `index-health-settings.png` | Settings: portfolio mode messaging |
+
+Optional extras (not required by the case study):
+
+| Filename | Shot |
+|---|---|
+| `index-health-social.png` | Social: sample/demo league table |
+
+PNG preferred. Landscape orientation looks best with the case-study layout.
 
 Drop files here, then in `index-health.html` replace the matching `<div class="ph">…</div>` with the `<img>` tag shown in the adjacent HTML comment.
 
